@@ -6,14 +6,18 @@ public class PlayerController2D : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
 
+    public Animator animator;
+
     // Les bindings sont définis ici : pas besoin de créer un asset Input Actions.
     private InputAction moveAction;
     private Rigidbody2D rb;
     private Vector2 moveInput;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
 
@@ -37,6 +41,14 @@ public class PlayerController2D : MonoBehaviour
     private void Update()
     {
         moveInput = Vector2.ClampMagnitude(moveAction.ReadValue<Vector2>(), 1f);
+        animator.SetFloat("Speed", moveInput.magnitude);
+
+        // On ne change l'orientation que si le joueur se déplace horizontalement.
+        // À l'arrêt (ou en montant/descendant), il garde sa dernière direction.
+        if (moveInput.x > 0.01f)
+            spriteRenderer.flipX = false;
+        else if (moveInput.x < -0.01f)
+            spriteRenderer.flipX = true;
     }
 
     private void FixedUpdate()
