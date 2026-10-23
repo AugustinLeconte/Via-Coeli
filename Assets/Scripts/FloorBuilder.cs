@@ -1,10 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// À poser sur un GameObject vide. Génère l'étage et instancie toutes les salles.
-/// Remplace FloorDebugView (tu peux le supprimer de la scène).
-/// </summary>
 public class FloorBuilder : MonoBehaviour
 {
     [Range(0, 6)] public int level = 0;
@@ -71,6 +67,6 @@ public class FloorBuilder : MonoBehaviour
 
         cam.orthographic = true;
         cam.transform.position = new Vector3(center.x, center.y, -10f);
-        cam.orthographicSize = Mathf.Max(totalH * 0.5f, totalW * 0.5f / cam.aspect);
+        //cam.orthographicSize = Mathf.Max(totalH * 0.5f, totalW * 0.5f / cam.aspect);
     }
 }
