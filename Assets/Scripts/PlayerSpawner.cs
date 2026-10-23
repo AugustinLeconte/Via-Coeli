@@ -1,12 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Se crée tout seul au lancement du jeu (rien à ajouter dans la scène).
-/// Attend que le générateur ait fini, puis place le joueur au centre de la salle de départ.
-/// Salle de départ = celle dont une porte est la plus proche de l'origine (0,0),
-/// ou la salle assignée dans "startRoom" si tu en mets une.
-/// </summary>
 public class PlayerSpawner : MonoBehaviour
 {
     [SerializeField] private Transform startRoom;

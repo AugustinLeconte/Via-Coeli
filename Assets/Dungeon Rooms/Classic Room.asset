@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5936a8744fa54b2428a8adadd8343de2, type: 3}
+  m_Name: Classic Room
+  m_EditorClassIdentifier: Assembly-CSharp::RoomStyle
+  floor: {fileID: 11400000, guid: 6454ad9d1cfca484ea0ecce1b702a530, type: 2}
+  wall: {fileID: 11400000, guid: 453f04a410ac5544db028f9648e78219, type: 2}
+  doorOpenColor: {r: 0.25, g: 0.2, b: 0.15, a: 1}
+  doorLockedColor: {r: 0.55, g: 0.15, b: 0.15, a: 1}
+  hazards: []
+  props: []
+  templateChance: 0.5
+  templates: []

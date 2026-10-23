@@ -153,6 +153,8 @@ MonoBehaviour:
   randomSeed: 1
   roomSpacing: {x: 30, y: 20}
   fitCameraToFloor: 1
+  themes:
+  - {fileID: 11400000, guid: 1ba9f97d69cb1d64982c4e6ac8179d35, type: 2}
 --- !u!4 &58813670
 Transform:
   m_ObjectHideFlags: 0

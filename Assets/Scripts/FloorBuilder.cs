@@ -15,6 +15,7 @@ public class FloorBuilder : MonoBehaviour
 
     public Floor Floor { get; private set; }
     public readonly Dictionary<Vector2Int, Room> Rooms = new Dictionary<Vector2Int, Room>();
+    public FloorTheme[] themes;
 
     void Start() => Build();
 
@@ -31,7 +32,9 @@ public class FloorBuilder : MonoBehaviour
         {
             var worldPos = new Vector2(node.GridPos.x * roomSpacing.x,
                                        node.GridPos.y * roomSpacing.y);
-            Rooms[node.GridPos] = RoomBuilder.Build(node, transform, worldPos);
+            var theme = themes[Mathf.Min(level, themes.Length - 1)];
+            var rng = new System.Random(seed ^ (node.GridPos.x * 73856093) ^ (node.GridPos.y * 19349663));
+            Rooms[node.GridPos] = RoomBuilder.Build(node, transform, worldPos,theme.GetStyle(node.Type), level, rng);
         }
 
         Debug.Log($"Niveau {level + 1} : {Floor.Rooms.Count} salles, " +

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Construit une salle à partir d'un RoomNode, sans aucun asset :
@@ -40,53 +41,74 @@ public static class RoomBuilder
         }
     }
 
-    public static Room Build(RoomNode node, Transform parent, Vector2 worldPos)
+    public static Room Build(RoomNode node, Transform parent, Vector2 worldPos,
+                            RoomStyle style, int level, System.Random rng)
     {
         var root = new GameObject($"Room {node.Type} {node.GridPos}");
         root.transform.SetParent(parent);
         root.transform.position = worldPos;
+        root.AddComponent<Grid>();                       // requis par les Tilemaps
 
         var room = root.AddComponent<Room>();
         room.Node = node;
 
-        int w = node.Size.x;
-        int h = node.Size.y;
-        int hx = (w - 1) / 2;   // demi-largeur en tuiles
-        int hy = (h - 1) / 2;   // demi-hauteur en tuiles
+        var layout = RoomLayoutGenerator.Generate(node, style, level, rng);
+        room.Tiles = layout.Tiles;
+        room.Half = layout.Half;
 
-        // Sol : un seul sprite étiré sur l'intérieur de la salle
-        CreateTile("Floor", root.transform, Vector2.zero,
-                   new Vector2(w - 2, h - 2), FloorColor(node.Type), 0);
+        var ground = CreateTilemap("Ground", root.transform, 0, false);
+        var walls  = CreateTilemap("Walls",  root.transform, 1, true);
 
-        // Périmètre : murs, avec une porte là où il y a une connexion
-        for (int x = -hx; x <= hx; x++)
-        {
-            for (int y = -hy; y <= hy; y++)
+        int w = layout.Tiles.GetLength(0), h = layout.Tiles.GetLength(1);
+        for (int gx = 0; gx < w; gx++)
+            for (int gy = 0; gy < h; gy++)
             {
-                bool isPerimeter = Mathf.Abs(x) == hx || Mathf.Abs(y) == hy;
-                if (!isPerimeter) continue;
-
-                var pos = new Vector2(x, y);
-                Vector2Int? doorDir = DoorDirectionAt(x, y, hx, hy);
-
-                if (doorDir.HasValue && node.Doors.Contains(doorDir.Value))
+                var def = layout.Tiles[gx, gy];
+                var cell = new Vector3Int(gx - layout.Half.x, gy - layout.Half.y, 0);
+                if (def.solid)
                 {
-                    var go = CreateTile("RoomDoor", root.transform, pos, Vector2.one, Color.white, 2);
-                    go.AddComponent<BoxCollider2D>();
-                    var door = go.AddComponent<RoomDoor>();
-                    door.Direction = doorDir.Value;
-                    door.SetLocked(false);
-                    room.Doors.Add(door);
+                    ground.SetTile(cell, style.floor.Pick(rng));   // sol sous les murs/rochers
+                    walls.SetTile(cell, def.Pick(rng));
                 }
-                else
-                {
-                    var wall = CreateTile("Wall", root.transform, pos, Vector2.one, WallColor, 1);
-                    wall.AddComponent<BoxCollider2D>();
-                }
+                else ground.SetTile(cell, def.Pick(rng));
             }
+
+        // Portes : objets à part, comme avant
+        foreach (var dir in node.Doors)
+        {
+            var pos = new Vector2(dir.x * layout.Half.x, dir.y * layout.Half.y);
+            var go = CreateTile("RoomDoor", root.transform, pos, Vector2.one, Color.white, 2);
+            go.AddComponent<BoxCollider2D>();
+            var door = go.AddComponent<RoomDoor>();
+            door.Direction = dir;
+            door.LockedColor = style.doorLockedColor;
+            door.OpenColor = style.doorOpenColor;
+            door.SetLocked(false);
+            room.Doors.Add(door);
         }
 
+        PropSpawner.Spawn(room, layout, style, rng);
         return room;
+    }
+
+    static Tilemap CreateTilemap(string name, Transform parent, int order, bool collider)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        // Une cellule Tilemap (0,0) est dessinée en (0.5,0.5) : on décale pour centrer sur les entiers
+        go.transform.localPosition = new Vector3(-0.5f, -0.5f, 0f);
+
+        var tm = go.AddComponent<Tilemap>();
+        go.AddComponent<TilemapRenderer>().sortingOrder = order;
+
+        if (collider)
+        {
+            go.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            var tc = go.AddComponent<TilemapCollider2D>();
+            go.AddComponent<CompositeCollider2D>();
+            tc.compositeOperation = Collider2D.CompositeOperation.Merge; // avant Unity 2023 : tc.usedByComposite = true
+        }
+        return tm;
     }
 
     /// <summary>Si la case (x,y) du périmètre est au milieu d'un côté, renvoie la direction de la porte.</summary>
