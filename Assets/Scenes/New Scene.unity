@@ -154,7 +154,8 @@ MonoBehaviour:
   roomSpacing: {x: 30, y: 20}
   fitCameraToFloor: 1
   themes:
-  - {fileID: 11400000, guid: 1ba9f97d69cb1d64982c4e6ac8179d35, type: 2}
+  - {fileID: 11400000, guid: 68fcbabf6e6154c438faac7e91245eba, type: 2}
+  - {fileID: 11400000, guid: a047770a3a27d064ba7a2b8ae7b7cbc3, type: 2}
 --- !u!4 &58813670
 Transform:
   m_ObjectHideFlags: 0
