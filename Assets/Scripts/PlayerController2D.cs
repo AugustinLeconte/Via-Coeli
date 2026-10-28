@@ -8,11 +8,12 @@ public class PlayerController2D : MonoBehaviour
 
     public Animator animator;
 
-    // Les bindings sont définis ici : pas besoin de créer un asset Input Actions.
+    private float speedMultiplier = 1f;
     private InputAction moveAction;
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private SpriteRenderer spriteRenderer;
+    private TileAgent tileAgent;
 
     private void Awake()
     {
@@ -33,6 +34,8 @@ public class PlayerController2D : MonoBehaviour
             .With("Left", "<Keyboard>/leftArrow")
             .With("Right", "<Keyboard>/rightArrow");
         moveAction.AddBinding("<Gamepad>/leftStick");
+
+        tileAgent = GetComponent<TileAgent>();
     }
 
     private void OnEnable() => moveAction.Enable();
@@ -53,11 +56,11 @@ public class PlayerController2D : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float mult = tileAgent != null ? tileAgent.SpeedMultiplier : 1f;
         // Sous Unity 2022 ou antérieur, remplacer linearVelocity par velocity.
-        rb.linearVelocity = moveInput * moveSpeed;
+        rb.linearVelocity = moveInput * moveSpeed * mult;
     }
 
-    /// <summary>Téléporte le joueur (utilisé par les portes).</summary>
     public void TeleportTo(Vector2 position)
     {
         rb.position = position;

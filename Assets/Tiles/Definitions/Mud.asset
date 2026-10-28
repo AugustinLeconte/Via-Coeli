@@ -16,4 +16,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 86289d945a26e86468445c15e6ebd8cc, type: 2}
   solid: 0
   blocksPathing: 0
-  effects: []
+  effects:
+  - {fileID: 11400000, guid: 095204e3f6fd5d04888372d92935338f, type: 2}

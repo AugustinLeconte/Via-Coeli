@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5936a8744fa54b2428a8adadd8343de2, type: 3}
-  m_Name: Lava Room
+  m_Name: LavaStyle
   m_EditorClassIdentifier: Assembly-CSharp::RoomStyle
   floor: {fileID: 11400000, guid: 6454ad9d1cfca484ea0ecce1b702a530, type: 2}
   wall: {fileID: 11400000, guid: 453f04a410ac5544db028f9648e78219, type: 2}
@@ -18,10 +18,10 @@ MonoBehaviour:
   doorLockedColor: {r: 0.55, g: 0.15, b: 0.15, a: 1}
   hazards:
   - tile: {fileID: 11400000, guid: e4b33434d32e16c46949f59badbaa3df, type: 2}
-    coverage: 0.1
-    clusterSize: 0
+    coverage: 0.12
+    clusterSize: 5
     minLevel: 0
-    roomTypes: 
+    roomTypes: 01000000i
   props: []
   templateChance: 0.5
   templates: []

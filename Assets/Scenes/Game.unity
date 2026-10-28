@@ -154,8 +154,7 @@ MonoBehaviour:
   roomSpacing: {x: 30, y: 20}
   fitCameraToFloor: 1
   themes:
-  - {fileID: 11400000, guid: 68fcbabf6e6154c438faac7e91245eba, type: 2}
-  - {fileID: 11400000, guid: a047770a3a27d064ba7a2b8ae7b7cbc3, type: 2}
+  - {fileID: 11400000, guid: fb0ebe78a1516b44194cdd1daac2255e, type: 2}
 --- !u!4 &58813670
 Transform:
   m_ObjectHideFlags: 0
@@ -390,6 +389,8 @@ GameObject:
   - component: {fileID: 580612196}
   - component: {fileID: 580612195}
   - component: {fileID: 580612199}
+  - component: {fileID: 580612201}
+  - component: {fileID: 580612200}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -581,6 +582,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &580612200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580612193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b15e791e7f07847af1e2cb72802148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  invincibilityTime: 0.5
+--- !u!114 &580612201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580612193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b5b1d15a66b294f9102c3e34574eac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileAgent
+  feetOffset: {x: 0, y: -0.3}
+  flying: 0
 --- !u!1 &992031664
 GameObject:
   m_ObjectHideFlags: 0

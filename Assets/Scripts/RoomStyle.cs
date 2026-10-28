@@ -40,17 +40,3 @@ public class RoomStyle : ScriptableObject
     public RoomTemplate[] templates;
 }
 
-[CreateAssetMenu(menuName = "Dungeon/Floor Theme")]
-public class FloorTheme : ScriptableObject
-{
-    [System.Serializable] public struct Override { public RoomType type; public RoomStyle style; }
-
-    public RoomStyle defaultStyle;
-    public Override[] overrides;
-
-    public RoomStyle GetStyle(RoomType t)
-    {
-        foreach (var o in overrides) if (o.type == t) return o.style;
-        return defaultStyle;
-    }
-}
