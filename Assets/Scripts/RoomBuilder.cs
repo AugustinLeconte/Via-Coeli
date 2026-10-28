@@ -47,7 +47,7 @@ public static class RoomBuilder
         var root = new GameObject($"Room {node.Type} {node.GridPos}");
         root.transform.SetParent(parent);
         root.transform.position = worldPos;
-        root.AddComponent<Grid>();                       // requis par les Tilemaps
+        root.AddComponent<Grid>();
 
         var room = root.AddComponent<Room>();
         room.Node = node;
@@ -64,6 +64,22 @@ public static class RoomBuilder
             for (int gy = 0; gy < h; gy++)
             {
                 var def = layout.Tiles[gx, gy];
+                
+                
+                
+                if (def == null)
+                {
+                    Debug.LogError($"Tile null en ({gx},{gy}) dans {node.Type} {node.GridPos} (style : {style?.name})", style);
+                    continue;
+                }
+                if (style.floor == null)
+                {
+                    Debug.LogError($"style.floor non assigné sur {style.name}", style);
+                    continue;
+                }
+                
+                
+                
                 var cell = new Vector3Int(gx - layout.Half.x, gy - layout.Half.y, 0);
                 if (def.solid)
                 {

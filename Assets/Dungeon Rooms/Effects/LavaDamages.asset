@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c793770fc5e96fd4684b21fe24ed759a, type: 3}
   m_Name: LavaDamages
   m_EditorClassIdentifier: Assembly-CSharp::DamageOverTimeEffect
-  damagePerSecond: 20
+  damagePerSecond: 0.5
