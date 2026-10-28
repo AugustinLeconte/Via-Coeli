@@ -22,6 +22,19 @@ public class FloorBuilder : MonoBehaviour
     [ContextMenu("Regenerate")]
     public void Build()
     {
+        if (themes == null || themes.Length == 0)
+        {
+            Debug.LogError("FloorBuilder : le tableau 'themes' est vide.", this);
+            return;
+        }
+
+        var theme = themes[Mathf.Min(level, themes.Length - 1)];
+        if (theme == null)
+        {
+            Debug.LogError($"FloorBuilder : themes[{Mathf.Min(level, themes.Length - 1)}] est vide (None).", this);
+            return;
+        }
+
         Clear();
 
         if (randomSeed) seed = Random.Range(0, int.MaxValue);
@@ -32,7 +45,6 @@ public class FloorBuilder : MonoBehaviour
         {
             var worldPos = new Vector2(node.GridPos.x * roomSpacing.x,
                                        node.GridPos.y * roomSpacing.y);
-            var theme = themes[Mathf.Min(level, themes.Length - 1)];
             var rng = new System.Random(seed ^ (node.GridPos.x * 73856093) ^ (node.GridPos.y * 19349663));
             Rooms[node.GridPos] = RoomBuilder.Build(node, transform, worldPos,theme.GetStyle(node.Type), level, rng);
         }
@@ -40,7 +52,17 @@ public class FloorBuilder : MonoBehaviour
         Debug.Log($"Niveau {level + 1} : {Floor.Rooms.Count} salles, " +
                   $"difficulté x{Floor.DifficultyMultiplier:0.00} (seed {seed})");
 
+        PlacePlayerInStartRoom();
         if (fitCameraToFloor) FitCamera();
+    }
+
+    void PlacePlayerInStartRoom()
+    {
+        var player = FindFirstObjectByType<PlayerController2D>();
+        if (player == null) return;
+
+        if (Rooms.TryGetValue(Floor.StartRoom.GridPos, out var startRoom))
+            player.TeleportTo(startRoom.transform.position);
     }
 
     void Clear()
