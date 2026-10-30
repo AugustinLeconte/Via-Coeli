@@ -43,15 +43,17 @@ public class PlayerController2D : MonoBehaviour
 
     private void Update()
     {
-        moveInput = Vector2.ClampMagnitude(moveAction.ReadValue<Vector2>(), 1f);
-        animator.SetFloat("Speed", moveInput.magnitude);
+        if (PauseMenu.GameIsPaused == false) {
+            moveInput = Vector2.ClampMagnitude(moveAction.ReadValue<Vector2>(), 1f);
+            animator.SetFloat("Speed", moveInput.magnitude);
 
-        // On ne change l'orientation que si le joueur se déplace horizontalement.
-        // À l'arrêt (ou en montant/descendant), il garde sa dernière direction.
-        if (moveInput.x > 0.01f)
-            spriteRenderer.flipX = false;
-        else if (moveInput.x < -0.01f)
-            spriteRenderer.flipX = true;
+            // On ne change l'orientation que si le joueur se déplace horizontalement.
+            // À l'arrêt (ou en montant/descendant), il garde sa dernière direction.
+            if (moveInput.x > 0.01f)
+                spriteRenderer.flipX = false;
+            else if (moveInput.x < -0.01f)
+                spriteRenderer.flipX = true;
+                }
     }
 
     private void FixedUpdate()
@@ -59,6 +61,7 @@ public class PlayerController2D : MonoBehaviour
         float mult = tileAgent != null ? tileAgent.SpeedMultiplier : 1f;
         // Sous Unity 2022 ou antérieur, remplacer linearVelocity par velocity.
         rb.linearVelocity = moveInput * moveSpeed * mult;
+
     }
 
     public void TeleportTo(Vector2 position)
