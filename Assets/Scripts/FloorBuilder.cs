@@ -46,7 +46,11 @@ public class FloorBuilder : MonoBehaviour
             var worldPos = new Vector2(node.GridPos.x * roomSpacing.x,
                                        node.GridPos.y * roomSpacing.y);
             var rng = new System.Random(seed ^ (node.GridPos.x * 73856093) ^ (node.GridPos.y * 19349663));
-            Rooms[node.GridPos] = RoomBuilder.Build(node, transform, worldPos, theme.GetStyle(node.Type, rng), level, rng);
+            var room = RoomBuilder.Build(node, transform, worldPos, theme.GetStyle(node.Type, rng), level, rng);
+            Rooms[node.GridPos] = room;
+            if (node.Type == RoomType.Normal)
+                room.gameObject.AddComponent<RoomEncounter>()
+                    .Init(room, level, (float)Floor.DifficultyMultiplier, rng);
         }
 
         Debug.Log($"Niveau {level + 1} : {Floor.Rooms.Count} salles, " +

@@ -18,6 +18,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     public float Current { get; private set; }
 
+    public event System.Action<Vector2> Hurt;
+
     float invincibleUntil;
     Image[] hearts;
 
@@ -28,11 +30,10 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         RefreshHearts();
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, Vector2 hitDirection)
     {
         if (Current <= 0f) return;
 
-        // Les dégâts continus (lave) sont plus petits que le plus petit vrai coup (0.5)
         bool isTick = amount < 0.5f;
         if (!isTick)
         {
@@ -41,9 +42,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         }
 
         Current = Mathf.Max(0f, Current - amount);
-        Debug.Log($"Joueur : -{amount:0.00} PV ({Current:0.0}/{maxHealth})");
         RefreshHearts();
 
+        if (!isTick) Hurt?.Invoke(hitDirection);   // pas de recul/anim pour les dégâts continus
         if (Current <= 0f) Debug.Log("Joueur mort !");
     }
 
