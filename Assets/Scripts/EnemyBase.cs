@@ -13,6 +13,11 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     public float contactDamage = 1f;
     public float contactCooldown = 0.8f;
 
+    [Header("Loot")]
+    [Range(0f, 1f)] public float coinDropChance = 0.35f;
+    public Vector2Int coinAmount = new Vector2Int(1, 1);
+
+
     protected Rigidbody2D rb;
     protected SpriteRenderer sr;
     protected Transform target;
@@ -63,7 +68,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     void FixedUpdate()
     {
-        if (!IsReady) { rb.linearVelocity = Vector2.zero; return; } // avant Unity 6 : rb.velocity
+        if (!IsReady) { rb.linearVelocity = Vector2.zero; return; }
 
         if (knockbackTimer > 0f) { knockbackTimer -= Time.fixedDeltaTime; return; }
 
@@ -77,15 +82,12 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         Think();
     }
 
-    /// <summary>Comportement propre à chaque ennemi.</summary>
     protected abstract void Think();
 
-    // ---------- Helpers ----------
     protected Vector2 DirToTarget() => ((Vector2)target.position - (Vector2)transform.position).normalized;
     protected float DistToTarget() => Vector2.Distance(target.position, transform.position);
     protected void Stop() => rb.linearVelocity = Vector2.zero;
 
-    // ---------- Dégâts ----------
     public void TakeDamage(float amount, Vector2 hitDirection)
     {
         if (!IsReady) return;
@@ -106,7 +108,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
     void Die()
     {
         dead = true;
-        OnDeath(); // ex : drop, particules
+        OnDeath();
+        if (Random.value < coinDropChance)
+            CoinPickup.Spawn(transform.position, Random.Range(coinAmount.x, coinAmount.y + 1));
         Destroy(gameObject);
     }
 
@@ -119,7 +123,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
             nextContactTime = Time.time + contactCooldown;
     }
 
-    /// <summary>Inflige des dégâts si le collider appartient au joueur. Renvoie true si c'est le joueur.</summary>
     public static bool TryDamagePlayer(Collider2D col, float damage, Vector2 dir)
     {
         if (col.GetComponentInParent<PlayerController2D>() == null) return false;

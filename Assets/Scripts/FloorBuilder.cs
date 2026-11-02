@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class FloorBuilder : MonoBehaviour
 {
+    [Header("Shop")]
+    public BonusCard[] shopCards;
+    public int shopItemCount = 3;
     [Range(0, 6)] public int level = 0;
     public int seed = 12345;
     public bool randomSeed = true;
@@ -48,6 +51,8 @@ public class FloorBuilder : MonoBehaviour
             var rng = new System.Random(seed ^ (node.GridPos.x * 73856093) ^ (node.GridPos.y * 19349663));
             var room = RoomBuilder.Build(node, transform, worldPos, theme.GetStyle(node.Type, rng), level, rng);
             Rooms[node.GridPos] = room;
+            if (node.Type == RoomType.Shop)
+                ShopBuilder.Build(room, shopCards, shopItemCount, rng);
             if (node.Type == RoomType.Normal)
                 room.gameObject.AddComponent<RoomEncounter>()
                     .Init(room, level, (float)Floor.DifficultyMultiplier, rng);

@@ -16,7 +16,6 @@ MonoBehaviour:
   normalStyles:
   - {fileID: 11400000, guid: 53f02476e4c816a4d9803cac93ce2fb2, type: 2}
   - {fileID: 11400000, guid: d12ebe466044fc743a7f9021ffd33a00, type: 2}
-  - {fileID: 11400000, guid: bfa01cbc930b69048888f0a01715e2e6, type: 2}
   overrides:
   - type: 3
     style: {fileID: 11400000, guid: 5f3fc24f44a327349ad586aab6cf9dc9, type: 2}
