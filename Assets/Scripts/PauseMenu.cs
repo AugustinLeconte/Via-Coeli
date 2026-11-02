@@ -9,6 +9,8 @@ public class PauseMenu : MonoBehaviour
 
     private InputAction pauseAction;
 
+    public static bool PlayerIsDead = false;
+
     private void Awake()
     {
         pauseAction = new InputAction("Pause", InputActionType.Button);
@@ -21,7 +23,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (pauseAction.WasPressedThisFrame())
+        if (!PlayerIsDead && pauseAction.WasPressedThisFrame())
         {
             if (GameIsPaused)
                 Resume();

@@ -19,6 +19,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public float Current { get; private set; }
 
     public event System.Action<Vector2> Hurt;
+    public event System.Action Died;
 
     float invincibleUntil;
     Image[] hearts;
@@ -45,7 +46,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         RefreshHearts();
 
         if (!isTick) Hurt?.Invoke(hitDirection);   // pas de recul/anim pour les dégâts continus
-        if (Current <= 0f) Debug.Log("Joueur mort !");
+        if (Current <= 0f)
+        {
+            Debug.Log("Joueur mort !");
+            Died?.Invoke();
+        }
     }
 
     public void Heal(float amount)
