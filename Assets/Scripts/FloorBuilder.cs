@@ -56,6 +56,11 @@ public class FloorBuilder : MonoBehaviour
             if (node.Type == RoomType.Normal)
                 room.gameObject.AddComponent<RoomEncounter>()
                     .Init(room, level, (float)Floor.DifficultyMultiplier, rng);
+            if (node.Type == RoomType.Boss) {
+                var boss = (BossEnemy)EnemyFactory.Create(EnemyKind.Boss, room.transform.position,
+                                room.transform, (float)Floor.DifficultyMultiplier, 0.5f);
+                room.gameObject.AddComponent<BossRoomController>().Init(this, room, boss);
+            }
         }
 
         Debug.Log($"Niveau {level + 1} : {Floor.Rooms.Count} salles, " +
@@ -63,6 +68,13 @@ public class FloorBuilder : MonoBehaviour
 
         PlacePlayerInStartRoom();
         if (fitCameraToFloor) FitCamera();
+    }
+
+    public void NextLevel()
+    {
+        if (level >= 6) { Debug.Log("Dernier niveau terminé !"); return; }
+        level++;
+        Build();
     }
 
     void PlacePlayerInStartRoom()

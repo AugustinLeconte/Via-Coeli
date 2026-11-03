@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum EnemyKind { Chaser, Shooter, Charger }
+public enum EnemyKind { Chaser, Shooter, Charger, Boss }
 
 /// <summary>
 /// Crée les ennemis par code, sans prefab ni sprite (carrés colorés).
@@ -58,6 +58,10 @@ public static class EnemyFactory
             case EnemyKind.Charger:
                 enemy = go.AddComponent<ChargerEnemy>();
                 color = new Color(0.9f, 0.6f, 0.2f); hp = 6f; speed = 2f; scale = 1.1f;
+                break;
+            case EnemyKind.Boss:
+                enemy = go.AddComponent<BossEnemy>();
+                color = new Color(0.55f, 0.1f, 0.15f); hp = 60f; speed = 3.5f; scale = 2.2f;
                 break;
             default:
                 enemy = go.AddComponent<ChaserEnemy>();

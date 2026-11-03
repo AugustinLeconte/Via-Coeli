@@ -29,6 +29,8 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     /// <summary>False pendant l'apparition (invulnérable et inactif).</summary>
     public bool IsReady => !dead && Time.time >= spawnReadyTime;
+    public float Health => health;
+    public bool IsDead => dead;
 
     /// <summary>Couleur affichée hors flash de dégâts (les sous-classes peuvent la surcharger).</summary>
     protected virtual Color DisplayColor => baseColor;
